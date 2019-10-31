@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  db:
+    image: mongo:4.0.4
+    ports:
+      - "27017-27019:27017-27019"
+    networks:
+      - microserviceblog
+
+  users:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - microserviceblog
+
+  blogs:
+    build:
+      context: ./blogs
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    networks:
+      - microserviceblog
+
+networks:
+  microserviceblog:
+    driver: bridge
